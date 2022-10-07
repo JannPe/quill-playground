@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import Quill from "quill"
+//import { ImageResize } from 'quill-image-resize-module';
 import "quill/dist/quill.snow.css"
 import { io } from "socket.io-client"
 import { useParams } from "react-router-dom"
@@ -13,9 +14,11 @@ const TOOLBAR_OPTIONS = [
   [{ color: [] }, { background: [] }],
   [{ script: "sub" }, { script: "super" }],
   [{ align: [] }],
-  ["image", "blockquote", "code-block"],
-  ["clean"],
+  ["image", "video", "blockquote", "code-block"],
+  ["formula"],
 ]
+
+//Quill.register('modules/imageResize', ImageResize);
 
 export default function TextEditor() {
   const { id: documentId } = useParams()
@@ -23,7 +26,7 @@ export default function TextEditor() {
   const [quill, setQuill] = useState()
 
   useEffect(() => {
-    const s = io("http://localhost:3001")
+    const s = io.connect("http://localhost:3001")
     setSocket(s)
 
     return () => {
