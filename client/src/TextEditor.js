@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useState } from "react"
 import Quill from "quill"
-//import { ImageResize } from 'quill-image-resize-module';
+//import ImageResize from "quill-image-resize-module";
 import "quill/dist/quill.snow.css"
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import { io } from "socket.io-client"
 import { useParams } from "react-router-dom"
+
+window.katex = katex;
 
 const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [
@@ -92,7 +96,7 @@ export default function TextEditor() {
     wrapper.append(editor)
     const q = new Quill(editor, {
       theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS },
+      modules: { toolbar: TOOLBAR_OPTIONS, },
     })
     q.disable()
     q.setText("Loading...")
