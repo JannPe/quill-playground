@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import Quill from "quill"
-//import ImageResize from "quill-image-resize-module";
+import BlotFormatter from 'quill-blot-formatter';
+// import QuillBetterTable from 'quill-better-table'
 import "quill/dist/quill.snow.css"
-import katex from "katex";
-import "katex/dist/katex.min.css";
+import katex from "katex"
+import "katex/dist/katex.min.css"
 import { io } from "socket.io-client"
 import { useParams } from "react-router-dom"
 
@@ -24,10 +25,16 @@ const TOOLBAR_OPTIONS = [
 
 //Quill.register('modules/imageResize', ImageResize);
 
+// Quill.register({
+//   'modules/better-table': QuillBetterTable
+// }, true)
+
 export default function TextEditor() {
   const { id: documentId } = useParams()
   const [socket, setSocket] = useState()
   const [quill, setQuill] = useState()
+
+  Quill.register('modules/blotFormatter', BlotFormatter);
 
   useEffect(() => {
     const s = io.connect("http://localhost:3001")
@@ -96,7 +103,23 @@ export default function TextEditor() {
     wrapper.append(editor)
     const q = new Quill(editor, {
       theme: "snow",
-      modules: { toolbar: TOOLBAR_OPTIONS, },
+      modules: {
+        toolbar: TOOLBAR_OPTIONS,
+        blotFormatter: {}
+        // table: false,
+        // 'better-table': {
+        //   operationMenu: {
+        //     items: {
+        //       unmergeCells: {
+        //         text: 'Another unmerge cells name'
+        //       }
+        //     },
+        //   }
+        // },
+      },
+      // keyboard: {
+      //   bindings: QuillBetterTable.keyboardBindings
+      // }
     })
     q.disable()
     q.setText("Loading...")
